@@ -1,0 +1,57 @@
+# GitHub Actions workflow — runs the monitor on a schedule.
+# Free tier: 2,000 minutes/month on private repos, unlimited on public.
+#
+# HOW STATE PERSISTENCE WORKS:
+# GitHub Actions are stateless (fresh VM every run). We need the SQLite DB
+# to persist between runs so we know which jobs we've already seen.
+# Solution: store jobs.db as a GitHub Actions artifact.
+# Each run: download previous DB → run monitor → upload updated DB.
+
+name: Job Monitor
+
+on:
+  schedule:
+    # Cron: every 30 minutes during business hours IST (3:30 - 15:00 UTC)
+    - cron: '0,30 3-15 * * 1-5'
+    # Or simpler: every hour
+    # - cron: '0 * * * *'
+  workflow_dispatch:  # allow manual trigger from GitHub UI
+
+jobs:
+  check-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Download the DB from the previous run (if it exists)
+      - name: Download previous state
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: jobs-db
+          path: .
+        continue-on-error: true  # first run won't have an artifact
+
+      - name: Run monitor
+        env:
+          # Store secrets in GitHub repo Settings → Secrets
+          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+        run: |
+          # Copy example config if no config exists
+          [ -f config.yaml ] || cp config.example.yaml config.yaml
+          python monitor.py
+
+      # Upload the updated DB for the next run
+      - name: Save state
+        uses: actions/upload-artifact@v4
+        with:
+          name: jobs-db
+          path: jobs.db
+          retention-days: 90

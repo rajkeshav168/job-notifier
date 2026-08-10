@@ -1,0 +1,121 @@
+# ============================================================
+# Job Notifier Configuration
+# ============================================================
+
+# Roles to watch — these are substring matches (case-insensitive).
+# A job matches if ANY of these appear in the title.
+roles:
+  - "data engineer"
+  - "analytics engineer"
+  - "data scientist"
+  - "machine learning"
+  - "ml engineer"
+  - "data analyst"
+  - "business analyst"
+  - "product analyst"
+
+# Optional: exclude roles containing these (e.g. "senior staff")
+exclude_roles:
+  - "intern"
+  - "director"
+  - "vp "
+
+# Companies to monitor.
+# type: greenhouse | greenhouse_eu | lever | ashby | smartrecruiters | scrape
+# id:   the company slug on that ATS (check the URL of their careers page)
+companies:
+  # ── Companies with structured ATS APIs (reliable, no scraping needed) ──
+
+  - name: Razorpay
+    type: greenhouse
+    id: razorpaysoftwareprivatelimited
+
+  - name: PhonePe
+    type: greenhouse
+    id: phonepe
+
+  - name: Groww
+    type: greenhouse_eu
+    id: groww
+
+  - name: Meesho
+    type: lever
+    id: meesho
+
+  - name: Paytm
+    type: lever
+    id: paytm
+
+  - name: Zomato
+    type: smartrecruiters
+    id: Zomato1
+
+  # ── Companies with custom career pages (need CSS selectors) ──
+  # Inspect their career pages in browser DevTools to find the right selectors.
+  # These are best-guess selectors — verify by running once and checking output.
+
+  - name: Swiggy
+    type: scrape
+    url: https://careers.swiggy.com/
+    selector: ".job-title, .opening-title, h3 a"
+    link_selector: "a[href*='job'], a[href*='opening']"
+
+  - name: CRED
+    type: scrape
+    url: https://careers.cred.club/openings
+    selector: ".role-title, .job-title, h3"
+    link_selector: "a[href*='open'], a[href*='role']"
+
+  - name: Navi
+    type: scrape
+    url: https://careers.navi.com/navi/jobslist
+    selector: ".job-title, .opening-title, h3"
+    link_selector: "a[href*='job']"
+
+  - name: Zerodha
+    type: scrape
+    url: https://careers.zerodha.com/
+    selector: ".job-title, h3, .position-title"
+    link_selector: "a[href*='job'], a[href*='career']"
+
+  - name: slice
+    type: scrape
+    url: https://slice.bank.in/careers
+    selector: ".job-title, .role-name, h3"
+    link_selector: "a[href*='job'], a[href*='career']"
+
+  # ── Example global companies (uncomment to enable) ──
+  # - name: Stripe
+  #   type: greenhouse
+  #   id: stripe
+  # - name: Notion
+  #   type: lever
+  #   id: notion
+
+# Notification settings
+notifications:
+  # Email via SMTP
+  email:
+    enabled: true
+    smtp_host: smtp.gmail.com
+    smtp_port: 587
+    username: your-email@gmail.com
+    password: clvhkyovdtenjlqx
+    from: your-email@gmail.com
+    to:
+      - your-email@gmail.com
+
+  # Slack webhook
+  slack:
+    enabled: false
+    webhook_url: https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+
+  # Console output (always on, useful for testing)
+  console:
+    enabled: true
+
+# How often to check (in minutes) — used in daemon mode
+check_interval_minutes: 30
+
+# SQLite database path for tracking seen jobs
+db_path: jobs.db
