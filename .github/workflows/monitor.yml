@@ -1,25 +1,15 @@
-# GitHub Actions workflow — runs the monitor on a schedule.
-# Free tier: 2,000 minutes/month on private repos, unlimited on public.
-#
-# HOW STATE PERSISTENCE WORKS:
-# GitHub Actions are stateless (fresh VM every run). We need the SQLite DB
-# to persist between runs so we know which jobs we've already seen.
-# Solution: store jobs.db as a GitHub Actions artifact.
-# Each run: download previous DB → run monitor → upload updated DB.
-
 name: Job Monitor
 
 on:
   schedule:
-    # Cron: every 30 minutes during business hours IST (3:30 - 15:00 UTC)
-    - cron: '0,30 3-15 * * 1-5'
-    # Or simpler: every hour
-    # - cron: '0 * * * *'
-  workflow_dispatch:  # allow manual trigger from GitHub UI
+    - cron: '0,30 3-16 * * *'
+  workflow_dispatch:
 
 jobs:
   check-jobs:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
       - uses: actions/checkout@v4
 
@@ -28,30 +18,34 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install playwright
+          playwright install chromium
 
-      # Download the DB from the previous run (if it exists)
+      - name: Create config
+        run: |
+          sed -e "s|GITHUB_GMAIL_ADDRESS|${{ secrets.GMAIL_ADDRESS }}|g" \
+              -e "s|GITHUB_GMAIL_APP_PASSWORD|${{ secrets.GMAIL_APP_PASSWORD }}|g" \
+              config.yaml.template > config.yaml
+          echo "Email configured as: $(grep 'username:' config.yaml)"
+
       - name: Download previous state
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v6
         with:
           name: jobs-db
           path: .
-        continue-on-error: true  # first run won't have an artifact
+          search_artifacts: true
+          if_no_artifact_found: warn
 
       - name: Run monitor
-        env:
-          # Store secrets in GitHub repo Settings → Secrets
-          SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-        run: |
-          # Copy example config if no config exists
-          [ -f config.yaml ] || cp config.example.yaml config.yaml
-          python monitor.py
+        run: python monitor.py
 
-      # Upload the updated DB for the next run
       - name: Save state
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: jobs-db
           path: jobs.db
           retention-days: 90
+          overwrite: true
