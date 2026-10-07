@@ -28,8 +28,6 @@ exclude_roles:
   - " 3"
   - " 4"
 
-# Only show jobs in these locations (substring match, case-insensitive).
-# Leave empty or remove to show all locations.
 locations:
   - "india"
   - "bangalore"
@@ -43,11 +41,12 @@ locations:
   - "pune"
   - "chennai"
   - "kolkata"
-  - "remote"
+  - "remote - india"
+
 companies:
 
   # ════════════════════════════════════════════════════════════
-  # GREENHOUSE — JSON API, no auth, most reliable
+  # GREENHOUSE — JSON API, no auth
   # ════════════════════════════════════════════════════════════
 
   - name: Razorpay
@@ -86,29 +85,25 @@ companies:
     type: greenhouse
     id: databricks
 
-  - name: Rippling
-    type: greenhouse
-    id: rippling
-
-  - name: Ramp
-    type: greenhouse
-    id: ramp
-
   - name: Airbnb
     type: greenhouse
     id: airbnb
 
-  - name: Uber
+  - name: Figma
     type: greenhouse
-    id: uber
+    id: figma
 
-  - name: CoinDCX
-    type: greenhouse
-    id: coindcx
+  # ════════════════════════════════════════════════════════════
+  # ASHBY — JSON API, no auth
+  # ════════════════════════════════════════════════════════════
 
-  - name: Cashfree
-    type: greenhouse
-    id: cashfree
+  - name: Ramp
+    type: ashby
+    id: ramp
+
+  - name: Notion
+    type: ashby
+    id: notion
 
   # ════════════════════════════════════════════════════════════
   # LEVER — JSON API, no auth
@@ -122,25 +117,9 @@ companies:
     type: lever
     id: paytm
 
-  - name: Notion
-    type: lever
-    id: notion
-
-  - name: Figma
-    type: lever
-    id: figma
-
   - name: Plaid
     type: lever
     id: plaid
-
-  - name: Urban Company
-    type: lever
-    id: urbancompany
-
-  - name: Delhivery
-    type: lever
-    id: delhivery
 
   # ════════════════════════════════════════════════════════════
   # SMARTRECRUITERS — JSON API, no auth
@@ -159,10 +138,7 @@ companies:
     id: DHL
 
   # ════════════════════════════════════════════════════════════
-  # PLAYWRIGHT — JS-rendered career pages (need headless browser)
-  # Selectors are best-guesses. Use Chrome DevTools or your
-  # Cloud extension to verify/fix. Run once, check which ones
-  # return 0 elements, then inspect those pages.
+  # PLAYWRIGHT — JS-rendered career pages
   # ════════════════════════════════════════════════════════════
 
   - name: Amazon
@@ -202,33 +178,6 @@ companies:
     url_template: "https://careers.walmart.com/us/jobs/{}"
     wait_selector: "div[data-testid='job-card']"
 
-  
-  - name: LinkedIn
-    type: playwright
-    url: "https://careers.linkedin.com/en/jobs?location=India"
-    selector: ".job-card__title, h3.job-title, a[data-tracking-control-name]"
-    wait_selector: ".job-card__title, h3.job-title"
-
-  - name: Adobe
-    type: playwright
-    url: "https://careers.adobe.com/us/en/search-results?keywords=analyst%20engineer&s=1&rk=l-india"
-    selector: ".job-title a, h2.job-title, a[data-ph-at-id='job-link']"
-    wait_selector: ".job-title, [data-ph-at-id='job-link']"
-
-
-  - name: American Express
-    type: playwright
-    url: "https://aexp.eightfold.ai/careers?location=India&query=analyst%20data"
-    selector: "a[role='link'] h3, .position-title, .job-title"
-    wait_selector: ".position-title, a[role='link'] h3"
-
-  - name: JPMorgan Chase
-    type: playwright
-    url: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/requisitions?location=India&locationId=300000000289738&locationLevel=country"
-    selector: ".job-title, h2 a, a[data-testid]"
-    wait_selector: ".job-title, h2 a"
-
-
   - name: Meta
     type: playwright
     url: "https://www.metacareers.com/jobs"
@@ -236,11 +185,11 @@ companies:
     selector: "h3"
     wait_selector: "a[href*='/profile/job_details/']"
 
-  - name: Salesforce
+  - name: Adobe
     type: playwright
-    url: "https://www.salesforce.com/company/careers/jobs/"
-    selector: "h3.card-title a.js-view-job"
-    wait_selector: "h3.card-title"
+    url: "https://careers.adobe.com/us/en/search-results?keywords=analyst%20engineer&s=1&rk=l-india"
+    selector: ".job-title a, h2.job-title, a[data-ph-at-id='job-link']"
+    wait_selector: ".job-title, [data-ph-at-id='job-link']"
 
   - name: Citi
     type: playwright
@@ -248,108 +197,183 @@ companies:
     selector: "a.sr-job-item__link"
     wait_selector: "a.sr-job-item__link"
 
-  - name: Deutsche Bank
-    type: playwright
-    url: "https://careers.db.com/professionals/search-roles?country=India"
-    card_selector: "a[href^='#/professional/job/']"
-    selector: "h2"
-    wait_selector: "a[href^='#/professional/job/']"
-
   - name: Barclays
     type: playwright
     url: "https://search.jobs.barclays/search-jobs/India"
     selector: "a.job-title--link"
     wait_selector: "a.job-title--link"
 
+  - name: Rippling
+    type: playwright
+    url: "https://www.rippling.com/en-GB/careers/open-roles"
+    card_selector: "ul.border-t > li > a.group"
+    selector: "span"
+    wait_selector: "ul.border-t > li > a.group"
+
+  - name: Uber
+    type: playwright
+    url: "https://jobs.uber.com/en/jobs/"
+    selector: "a.js-view-job"
+    wait_selector: "a.js-view-job"
+
+  - name: CoinDCX
+    type: playwright
+    url: "https://coindcx.mynexthire.com/employer/jobs/careers"
+    card_selector: "tr.list-data.clickable"
+    selector: "td:first-child"
+    wait_selector: "tr.list-data"
+
+  - name: Cashfree
+    type: playwright
+    url: "https://careers.kula.ai/cashfree"
+    card_selector: "div.chakra-card"
+    selector: "p.chakra-text"
+    link_selector: "a.chakra-link"
+    wait_selector: "div.chakra-card"
+
+  - name: Urban Company
+    type: playwright
+    url: "https://careers.urbancompany.com/jobs"
+    card_selector: "div.jobs-list div.list-body > a"
+    selector: "div.role"
+    wait_selector: "div.list-body"
+
+  - name: Salesforce
+    type: playwright
+    url: "https://www.salesforce.com/company/careers/jobs/"
+    card_selector: "div.card-job"
+    selector: "h3.card-title a.js-view-job"
+    wait_selector: "h3.card-title"
+
+  - name: Deutsche Bank
+    type: playwright
+    url: "https://careers.db.com/professionals/search-roles#/professional/results/"
+    card_selector: "div.yello-search-result a[href*='/job/']"
+    selector: "h2"
+    wait_selector: "div.yello-search-result"
+
   - name: Morgan Stanley
     type: playwright
-    url: "https://morganstanley.tal.net/vx/lang-en-GB/mobile-0/brand-2/xf-1aa1a96c5ba3/candidate/jobboard/vacancy/1/adv/?f_Item_Opportunity_Full_Time_498=10229"
-    selector: ".search-result-item__title, h3 a, .opportunity-title"
-    wait_selector: ".search-result-item__title, .opportunity-title"
-
-  - name: HDFC Bank
-    type: playwright
-    url: "https://hdfcbank.darwinbox.in/ms/candidate/careers"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: ICICI Bank
-    type: playwright
-    url: "https://career.icicibank.com/"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: Axis Bank
-    type: playwright
-    url: "https://axisbank.co.in/careers"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: Flipkart
-    type: playwright
-    url: "https://www.flipkartcareers.com/#!/joblist"
-    selector: ".job-tittle a, .job-title, h4 a"
-    wait_selector: ".job-tittle, .job-title"
-
-  - name: Myntra
-    type: playwright
-    url: "https://careers.myntra.com/"
-    selector: ".job-title, h3 a, .role-name"
-    wait_selector: ".job-title, .role-name"
-
-  - name: Nykaa
-    type: playwright
-    url: "https://careers.nykaa.com/jobs"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: BigBasket
-    type: playwright
-    url: "https://careers.bigbasket.com/"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: Snapdeal
-    type: playwright
-    url: "https://careers.snapdeal.com/"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: Zepto
-    type: playwright
-    url: "https://www.zepto.co/careers"
-    selector: ".job-title, h3 a, .role-name"
-    wait_selector: ".job-title, .role-name"
-
-  - name: Ola
-    type: playwright
-    url: "https://www.olacabs.com/careers"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
+    url: "https://morganstanley.tal.net/vx/lang-en-GB/mobile-0/brand-2/xf-1aa1a96c5ba3/candidate/jobboard/vacancy/1/adv/"
+    selector: "table.solr_search_list tr.search_res a.subject"
+    wait_selector: "table.solr_search_list"
 
   - name: MakeMyTrip
     type: playwright
-    url: "https://careers.makemytrip.com/"
+    url: "https://careers.makemytrip.com/prod/jobs"
+    card_selector: "a.typ-opening-card"
+    selector: "h2.title"
+    wait_selector: "a.typ-opening-card"
+
+  - name: ICICI Bank
+    type: playwright
+    url: "https://www.icicicareers.com/CareerApplicant/Career/job-listing/"
+    card_selector: "div.img__wrap"
+    selector: "p.text-black.sm-fsize12"
+    link_selector: "a.cust-trendapply-btn"
+    wait_selector: "div.img__wrap"
+
+  - name: Axis Bank
+    type: playwright
+    url: "https://axisbank.ripplehire.com/candidate/?token=WIXhCuz0XRZ7H0GZCwjJ&source=CAREERSITE#list"
+    selector: "li.job a.job-title"
+    wait_selector: "li.job"
+
+  - name: Flipkart
+    type: playwright
+    url: "https://flipkart.turbohire.co/dashboardv2"
+    selector: "div[class*='jss'] h6, div[class*='jss'] span"
+    wait_selector: "div[class*='jss']"
+
+  - name: Ola
+    type: playwright
+    url: "https://olacareers.turbohire.co/careerpage/e0c1eb37-eb7a-4ca4-bcc5-d59ce4ce9212"
+    selector: "div[class*='jss'] h6, div[class*='jss'] span"
+    wait_selector: "div[class*='jss']"
+
+  - name: Nykaa
+    type: playwright
+    url: "https://careers.nykaa.com/"
     selector: ".job-title, h3 a, .position-title"
     wait_selector: ".job-title, .position-title"
 
-  - name: PolicyBazaar
+  # ── Darwinbox platform ──
+
+  - name: Delhivery
     type: playwright
-    url: "https://careers.policybazaar.com/"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
+    url: "https://delhivery.darwinbox.in/ms/candidatev2/main/careers/allJobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-title"
+    link_selector: "div.job-tile a.db-btn"
+    wait_selector: "div.job-tile"
+
+  - name: Zepto
+    type: playwright
+    url: "https://zepto.darwinbox.in/ms/candidatev2/main/careers/allJobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-title"
+    link_selector: "div.job-tile a.db-btn"
+    wait_selector: "div.job-tile"
+
+  - name: BigBasket
+    type: playwright
+    url: "https://bigbasket.darwinbox.in/ms/candidatev2/main/careers/allJobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-title"
+    link_selector: "div.job-tile a.db-btn"
+    wait_selector: "div.job-tile"
 
   - name: Rapido
     type: playwright
-    url: "https://careers.rapido.bike/"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
+    url: "https://rapido.darwinbox.in/ms/candidatev2/main/careers/allJobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-title"
+    link_selector: "div.job-tile a.db-btn"
+    wait_selector: "div.job-tile"
 
-  - name: CRED
+  - name: BharatPe
     type: playwright
-    url: "https://careers.cred.club/openings"
-    selector: ".role-title, .job-title, h3"
-    wait_selector: ".role-title, .job-title"
+    url: "https://bharatpe.darwinbox.in/ms/candidatev2/main/careers/allJobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-title"
+    link_selector: "div.job-tile a.db-btn"
+    wait_selector: "div.job-tile"
+
+  # ── Oracle Recruiting Cloud ──
+
+  - name: JPMorgan Chase
+    type: playwright
+    url: "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001/jobs?location=India"
+    card_selector: "div.job-tile"
+    selector: "span.job-tile__title"
+    link_selector: "div.job-tile a[href*='/job/']"
+    wait_selector: "div.job-tile"
+
+  - name: American Express
+    type: playwright
+    url: "https://careers.americanexpress.com/"
+    card_selector: "div.job-tile"
+    selector: "span.job-tile__title"
+    link_selector: "div.job-tile a[href*='/job/']"
+    wait_selector: "div.job-tile"
+
+  - name: EXL
+    type: playwright
+    url: "https://fa-ewjt-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2/jobs?location=India&locationId=300000000467203&locationLevel=country&mode=job_location"
+    card_selector: "div.job-tile"
+    selector: "span.job-tile__title"
+    link_selector: "div.job-tile a[href*='/job/']"
+    wait_selector: "div.job-tile"
+
+  - name: Kotak Mahindra Bank
+    type: playwright
+    url: "https://hcbt.fa.em2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/jobs"
+    card_selector: "div.job-tile"
+    selector: "span.job-tile__title"
+    link_selector: "div.job-tile a[href*='/job/']"
+    wait_selector: "div.job-tile"
+
+  # ── Remaining ──
 
   - name: Zerodha
     type: playwright
@@ -369,31 +393,12 @@ companies:
     selector: ".job-title, .role-name, h3"
     wait_selector: ".job-title, .role-name"
 
-  - name: BharatPe
-    type: playwright
-    url: "https://bharatpe.com/careers"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
+  # ════════════════════════════════════════════════════════════
+  # DROPPED — no viable scraping path
+  # Snapdeal, LinkedIn, HDFC Bank, Myntra, PolicyBazaar, CRED
+  # ════════════════════════════════════════════════════════════
 
-  - name: EXL
-    type: playwright
-    url: "https://www.exlservice.com/careers/search-jobs?country=India"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-  - name: Kotak Mahindra Bank
-    type: playwright
-    url: "https://www.kotak.com/en/careers.html"
-    selector: ".job-title, h3 a, .position-title"
-    wait_selector: ".job-title, .position-title"
-
-# ============================================================
-# Notifications
-# ============================================================
-
-# Notification settings
 notifications:
-  # Email via SMTP
   email:
     enabled: true
     smtp_host: smtp.gmail.com
@@ -404,17 +409,12 @@ notifications:
     to:
       - GITHUB_GMAIL_ADDRESS
 
-  # Slack webhook
   slack:
     enabled: false
     webhook_url: https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 
-  # Console output (always on, useful for testing)
   console:
     enabled: true
 
-# How often to check (in minutes) — used in daemon mode
 check_interval_minutes: 30
-
-# SQLite database path for tracking seen jobs
 db_path: jobs.db
