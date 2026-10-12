@@ -355,7 +355,8 @@ def fetch_playwright(url: str, company_name: str, selector: str,
                         from urllib.parse import urljoin
                         job_url = urljoin(url, job_url)
 
-                    job_id = hashlib.md5(f"{company_name}:{title}:{job_url}".encode()).hexdigest()
+                    # job_id = hashlib.md5(f"{company_name}:{title}:{job_url}".encode()).hexdigest()
+                    job_id = hashlib.md5(f"{company_name}:{title}".encode()).hexdigest()
 
                     jobs.append({
                         "id": job_id,
@@ -395,7 +396,8 @@ def fetch_playwright(url: str, company_name: str, selector: str,
                         from urllib.parse import urljoin
                         job_url = urljoin(url, job_url)
 
-                    job_id = hashlib.md5(f"{company_name}:{title}:{job_url}".encode()).hexdigest()
+                    # job_id = hashlib.md5(f"{company_name}:{title}:{job_url}".encode()).hexdigest()
+                    job_id = hashlib.md5(f"{company_name}:{title}".encode()).hexdigest()
 
                     jobs.append({
                         "id": job_id,
